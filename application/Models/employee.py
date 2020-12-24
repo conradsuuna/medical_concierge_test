@@ -1,9 +1,9 @@
+from .. import session, engine
+from sqlalchemy import Column, Integer, String, Enum
+# from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from .. import session
 
 Base = declarative_base()
-from sqlalchemy import Column, Integer, String
-# from sqlalchemy.orm import relationship
 
 import enum
 
@@ -27,7 +27,7 @@ class Employee(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     staff_status = Column(Enum(StaffStatus))
-    role = Column(Enum(Role))
+    role = Column(Enum(Role),nullable=True)
     time_spent_status = Column(Enum(TimeStatus))
     # designation = relationship(Designation, backref="designation")
 
@@ -37,4 +37,12 @@ class Employee(Base):
     def save(self):
         session.add(self)
         session.commit()
-        
+
+    def to_json(self):
+        json_obj = {}
+        for column in self.__table__.columns:
+            json_obj[column.name] = str(getattr(self, column.name))
+        return json_obj
+
+# Base.metadata.create_all(engine) #edit here
+Employee.__table__.create(engine, checkfirst=True)

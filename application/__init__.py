@@ -7,5 +7,3 @@ engine = create_engine(URL(**sqlite_db))
 
 Session = sessionmaker(bind=engine)
 session = Session()
-
-Base.metadata.create_all(engine) #edit here

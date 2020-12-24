@@ -1,9 +1,8 @@
+from .. import session, engine
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from .. import session
-from sqlalchemy.orm import relationship
 
 Base = declarative_base()
-from sqlalchemy import Column, Integer, String
 
 class Designation(Base):
     __tablename__ = 'designation'
@@ -20,4 +19,12 @@ class Designation(Base):
     def save(self):
         session.add(self)
         session.commit()
-        
+
+    def to_json(self):
+        json_obj = {}
+        for column in self.__table__.columns:
+            json_obj[column.name] = str(getattr(self, column.name))
+        return json_obj
+
+# Base.metadata.create_all(engine) #edit here
+Designation.__table__.create(engine, checkfirst=True)

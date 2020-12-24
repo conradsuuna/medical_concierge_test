@@ -3,3 +3,9 @@ venv
 
 venv/*
 .vscode/*
+topsoft_db.sqlite3
+
+application/__pycache__
+Controllers/__pycache__
+Models/__pycache__
+__pycache__
